@@ -1,0 +1,71 @@
+package GorselFinal2020;
+
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Vector;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.TableColumn;
+
+
+public class gorsel_171220031_2 extends javax.swing.JFrame {
+
+    public gorsel_171220031_2() {
+        initComponents();
+      
+       
+        Vector columnNames = new Vector();
+        Vector data = new Vector();
+           //
+        try {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:ucanaccess://Vt1.accdb");
+            String sql = "SELECT TCKİMLİKNO,AD,SOYAD,TELNO FROM KİMLİK INNER JOIN TELNO ON KİMLİK.TCKİMLİKNO = TELNO.TCKİMLİKNO";
+            Statement statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columns = metaData.getColumnCount();
+            for (int i = 1; i <= columns; i++) {
+                columnNames.addElement(metaData.getColumnName(i));
+            }
+            while (resultSet.next()) {
+                Vector row = new Vector(columns);
+                for (int i = 1; i <= columns; i++) {
+                    row.addElement(resultSet.getObject(i));
+                }
+                data.addElement(row);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        JTable table = new JTable(data, columnNames);
+        table.setColumnSelectionAllowed(true);
+        table.setCellSelectionEnabled(true);
+                
+        TableColumn column;
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            column = table.getColumnModel().getColumn(i);
+            column.setMaxWidth(250);
+        }
+        jPanel1.setLayout(null);
+        JScrollPane scrollPane = new JScrollPane(table);        
+        scrollPane.setBounds(10, 53, 927, 480);
+        jPanel1.add(scrollPane);                 
+        JLabel lblNewLabel = new JLabel("TABLO");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblNewLabel.setBounds(10, 11, 927, 31);
+        jPanel1.add(lblNewLabel);
+        
+    }

@@ -1,0 +1,85 @@
+package GorselFinal2020;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+
+
+public class gorsel_171220031_1 extends javax.swing.JFrame {
+
+
+    public gorsel_171220031_1() throws FileNotFoundException {
+        
+        initComponents();
+    }
+    String dosyaadi = "ders.txt";
+    File dosya = new File(dosyaadi);
+
+private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        
+    }                                          
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        jComboBox3.removeAllItems();
+        jComboBox2.repaint();
+        String secilen1 = null,secilen2 = null;
+        try {
+            Scanner scanner = new Scanner(dosya);
+            if((jComboBox1.getSelectedIndex()==1)){
+                secilen1 = "Güz";                
+            }else if(jComboBox1.getSelectedIndex()==2){
+                secilen1 = "Bahar";
+            }else if(jComboBox1.getSelectedIndex()==3){
+                secilen1 = "Yaz Okulu";
+            }
+            if((jComboBox2.getSelectedIndex()==1)){
+                secilen2 = "2018";                
+            }else if(jComboBox2.getSelectedIndex()==2){
+                secilen2 = "2019";
+            }else if(jComboBox2.getSelectedIndex()==3){
+                secilen2 = "2020";
+            }
+            
+           
+            while(scanner.hasNextLine()){
+                String kelime = scanner.nextLine();
+                String[] parcalanmis = kelime.split("/");                  
+                    if((parcalanmis[0].equals(secilen1))&&(parcalanmis[1].equals(secilen2))){
+                        System.out.println("oldu");
+                        jComboBox3.addItem(parcalanmis[2]);
+                    }                                                  
+            }
+            scanner.close();
+            scanner = new Scanner(dosya);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(gorsel_171220031_1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            // TODO add your handling code here:
+    }                                          
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        jPanel2.removeAll();
+        try {
+            Scanner scanner = new Scanner(dosya);
+            while(scanner.hasNextLine()){
+                String kelime = scanner.nextLine();
+                String[] parcalanmis = kelime.split("/");
+                if((parcalanmis[0].equals(jComboBox1.getSelectedItem()))&&(parcalanmis[1].equals(jComboBox2.getSelectedItem()) && parcalanmis[2].equals(jComboBox3.getSelectedItem()))){ 
+                   for(int i=0;i<Integer.parseInt(parcalanmis[3]);i++){
+                       JButton button = new JButton();
+                       button.setText(i+" nolu ödev");
+                       button.setVisible(true);
+                       jPanel2.add(button);
+                       jPanel2.revalidate();
+                   }
+                }                                                  
+            }
+            scanner.close();
+            scanner = new Scanner(dosya);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(gorsel_171220031_1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }                                        
